@@ -11,6 +11,7 @@ const (
 	RPAREN TokenType = '>'
 	SLASH  TokenType = '/'
 	STRING TokenType = '*'
+	EOF    TokenType = 'E'
 )
 
 //Takes a tokentype and a value

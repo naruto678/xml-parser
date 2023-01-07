@@ -4,3 +4,4 @@ run: build
 	@./bin/parser 
 test: 
 	@go test -v . 
+
