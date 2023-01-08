@@ -19,8 +19,16 @@ func TestParser(t *testing.T) {
 		t.Fatal("Lexer failed")
 	}
 
-	for _, token := range tokens {
-		fmt.Println(token.String())
-	}
+	parser := NewParser(tokens)
+	root_node, err := parser.Parse()
 
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+	fmt.Println("This is my name", root_node.Name)
+	fmt.Println("These are my children", root_node.Children)
+	for _, child := range root_node.Children {
+		fmt.Println(child)
+		fmt.Println(child.TextValue)
+	}
 }

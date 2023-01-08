@@ -19,6 +19,7 @@ func NewParser(tokens []Token) *Parser {
 		Idx:    0,
 		Tokens: tokens,
 	}
+
 }
 
 func NewNode(Name string, Parent Node) Node {
@@ -51,34 +52,50 @@ func (p *Parser) GetCurrentToken() Token {
 	return token_val
 }
 
+func (p *Parser) PeekNext() Token {
+	if p.Idx+1 >= len(p.Tokens) {
+		return EOF()
+	} else {
+		return p.Tokens[p.Idx+1]
+	}
+}
+
 func (p *Parser) GetToken(idx int) Token {
 	if p.Idx > len(p.Tokens) {
-		return NewToken(EOF, "EOF", "EOF")
+		return EOF()
 	}
 	return p.Tokens[p.Idx]
 }
 
+func (p *Parser) Parse() (Node, error) {
+	parent_node := Node{}
+	return p.Node(parent_node)
+}
 func (p *Parser) Node(parent Node) (Node, error) {
 	var curr_node Node
-	if p.Peek().TokenType == LPAREN {
-		if p.GetCurrentToken().TokenType == STRING {
-			curr_node = NewNode(p.Peek().Literal, parent)
+	if p.GetCurrentToken().TokenType == LPAREN {
+		if p.Peek().TokenType == STRING {
+			curr_node = NewNode(p.GetCurrentToken().Literal, parent)
 			if curr_token := p.GetCurrentToken(); curr_token.TokenType != RPAREN {
 				return curr_node, fmt.Errorf("expected '>' Got %s", p.Peek().Name)
 			}
 
-			next_token := p.GetCurrentToken()
+			next_token := p.Peek()
 
-			for next_token.TokenType == LPAREN {
-				child_node := Node(curr_node)
+			for next_token.TokenType == LPAREN && p.PeekNext().TokenType != SLASH {
+				child_node, err := p.Node(curr_node)
+				if err != nil {
+					return curr_node, err
+				}
+				fmt.Println("This is the next_token", next_token.Name)
 				curr_node.Children = append(curr_node.Children, &child_node)
 				next_token = p.Peek()
+
 			}
 
 			if next_token.TokenType == STRING {
 				curr_node.TextValue = next_token.Literal
-			} else {
-				return curr_node, fmt.Errorf("expected a '>' or a string literal . Got %s", p.Peek().Literal)
+				p.GetCurrentToken()
 			}
 
 			if p.GetCurrentToken().TokenType == LPAREN && p.GetCurrentToken().TokenType == SLASH {
@@ -95,4 +112,8 @@ func (p *Parser) Node(parent Node) (Node, error) {
 		}
 	}
 	return curr_node, fmt.Errorf("expected < . got %s", p.Peek().Name)
+}
+
+func (p *Parser) Print(printer Printer) string {
+	return printer.Print()
 }

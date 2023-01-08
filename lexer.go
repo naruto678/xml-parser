@@ -11,7 +11,6 @@ const (
 	RPAREN TokenType = '>'
 	SLASH  TokenType = '/'
 	STRING TokenType = '*'
-	EOF    TokenType = 'E'
 )
 
 //Takes a tokentype and a value
@@ -31,6 +30,13 @@ type Token struct {
 
 func (t *Token) String() string {
 	return fmt.Sprintf("Token(%s, %s)", t.Name, t.Literal)
+}
+
+func EOF() Token {
+	return Token{
+		Literal: "EOF",
+		Name:    "EOF",
+	}
 }
 
 func Lexer(source string) []Token {
@@ -58,7 +64,7 @@ func Lexer(source string) []Token {
 			tokens = append(tokens, NewToken(STRING, literal, "STRING"))
 		}
 	}
-
+	tokens = append(tokens, EOF())
 	return tokens
 }
 
