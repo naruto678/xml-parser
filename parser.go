@@ -87,7 +87,6 @@ func (p *Parser) Node(parent Node) (Node, error) {
 				if err != nil {
 					return curr_node, err
 				}
-				fmt.Println("This is the next_token", next_token.Name)
 				curr_node.Children = append(curr_node.Children, &child_node)
 				next_token = p.Peek()
 
@@ -114,6 +113,6 @@ func (p *Parser) Node(parent Node) (Node, error) {
 	return curr_node, fmt.Errorf("expected < . got %s", p.Peek().Name)
 }
 
-func (p *Parser) Print(printer Printer) string {
-	return printer.Print()
+func (p *Parser) Print(printer Printer) {
+	printer.Print()
 }

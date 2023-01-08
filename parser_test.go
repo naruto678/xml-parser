@@ -31,4 +31,9 @@ func TestParser(t *testing.T) {
 		fmt.Println(child)
 		fmt.Println(child.TextValue)
 	}
+
+	bfs_printer := BFSPrinter{
+		Root: root_node,
+	}
+	parser.Print(bfs_printer)
 }

@@ -2,4 +2,8 @@
 	<B> The value of B</B>
 	<C> The value of C</C>
 	<D> the value of D</D>
+	<E>some value of E</E>
+	<F>
+		<G> the value of G</G>
+	</F>
 </A> 
